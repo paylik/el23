@@ -8,7 +8,7 @@ router.post('/add', async (req, res) => {
 
   }
   catch (e) {
-    res.status(500).json({message: 'Bad request'})
+    res.status(500).json({message: 'Bad request 1'})
   }
 })
 
@@ -18,7 +18,7 @@ router.get('/', auth, async (req, res) => {
     res.json(cart)
   }
   catch (e) {
-    res.status(500).json({message: 'Bad request'})
+    res.status(500).json({message: 'Bad request 2'})
   }
 })
 

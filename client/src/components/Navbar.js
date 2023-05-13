@@ -5,10 +5,12 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom'
 import logo from '../img/001.png'
 import { Button } from "primereact/button";
+import { StateContext } from "../context/StateContext";
 
 export const Navbar = () => {
 
   const auth = useContext(AuthContext)
+  const state = useContext(StateContext)
   const navigate = useNavigate()
 
   const loginItems = [
@@ -56,7 +58,8 @@ export const Navbar = () => {
   const end =
     <div className="flex">
       <InputText placeholder="Search" type="text" className="w-full" />
-      { auth.isAdmin && <Button icon="pi pi-pencil" text raised severity="danger" /> }
+      { auth.isAdmin &&
+        <Button icon="pi pi-pencil" text raised severity="danger" onClick={() => state.setAddDialogVisible(true)} /> }
       { auth.isAuthenticated ?
         <Button label="Quit" icon="pi pi-power-off" text raised onClick={ () => auth.logout() } className="pr-5" />
         : <Button label="Login" icon="pi pi-sign-in" text raised onClick={ () => navigate('/cart') } className="pr-5" /> }

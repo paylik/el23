@@ -1,4 +1,4 @@
-const { Schema, model, Types } = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const schema = new Schema({
   productId: { type: String, required: true, unique: true },
@@ -6,9 +6,8 @@ const schema = new Schema({
   description: { type: String, required: true },
   manufacturer: { type: String, required: true },
   country: { type: String, required: true },
-  prise: { type: String, required: true },
-  quantity: { type: String, required: true },
-  owner: { type: Types.ObjectId, ref: 'User' },
+  price: { type: String, required: true },
+  img: { type: String },
 })
 
 module.exports = model('Product', schema)

@@ -1,6 +1,5 @@
 {
   "port": 5000,
   "jwtSecret": "paylik el23",
-  "mongoUri": "mongodb+srv://paylik:p7hknWPXhZKJSMAr@el23.genleao.mongodb.net/app",
-  "baseUrl": "http://localhost:5000"
+  "mongoUri": "mongodb+srv://paylik:p7hknWPXhZKJSMAr@el23.genleao.mongodb.net/app"
 }
