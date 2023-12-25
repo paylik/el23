@@ -1,68 +1,125 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { InputText } from "primereact/inputtext";
 import { Menubar } from "primereact/menubar";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom'
 import logo from '../img/001.png'
 import { Button } from "primereact/button";
-import { StateContext } from "../context/StateContext";
+// import { StateContext } from "../context/StateContext";
+import { observer } from "mobx-react-lite";
+import appState from "../store/appState";
+import products from "../store/products";
 
-export const Navbar = () => {
+export const Navbar = observer(() => {
 
   const auth = useContext(AuthContext)
-  const state = useContext(StateContext)
-  const navigate = useNavigate()
-
-  const loginItems = [
+  // const state = useContext(StateContext)
+  const [loginItems, setLoginItems] = useState([
     {
-      label: 'Home',
+      label: 'Домой',
       icon: 'pi pi-fw pi-home',
       command: () => navigate('/'),
     },
     {
-      label: 'About Us',
+      label: 'О нас',
       icon: 'pi pi-fw pi-info-circle',
       command: () => navigate('/about'),
     },
     {
-      label: 'Delivery',
+      label: 'Доставка',
       icon: 'pi pi-fw pi-truck',
       command: () => navigate('/delivery'),
     },
     {
-      label: 'Cart',
+      label: 'Проект ',
+      icon: 'pi pi-fw pi-server',
+      command: () => navigate('/project'),
+    },
+    {
+      // label: `( ${ cart.length ?? cart.length } )  Корзина`,
+      label: `Корзина`,
       icon: 'pi pi-fw pi-shopping-cart',
       command: () => navigate('/cart'),
     }
-  ];
+  ])
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    let i = [...loginItems]
+    if (auth.cart && auth.cart.length) i[4].label = `( ${ auth.cart.length } )  Корзина`
+    setLoginItems([...i])
+  }, [auth.cart])
+
+  // const loginItems = [
+  //   {
+  //     label: 'Домой',
+  //     icon: 'pi pi-fw pi-home',
+  //     command: () => navigate('/'),
+  //   },
+  //   {
+  //     label: 'О нас',
+  //     icon: 'pi pi-fw pi-info-circle',
+  //     command: () => navigate('/about'),
+  //   },
+  //   {
+  //     label: 'Доставка',
+  //     icon: 'pi pi-fw pi-truck',
+  //     command: () => navigate('/delivery'),
+  //   },
+  //   {
+  //     label: 'Проект ' +
+  //       '',
+  //     icon: 'pi pi-fw pi-server',
+  //     command: () => navigate('/project'),
+  //   },
+  //   {
+  //     label: `( ${ cart.length ?? cart.length } )  Корзина`,
+  //     // label: `Корзина`,
+  //     icon: 'pi pi-fw pi-shopping-cart',
+  //     command: () => navigate('/cart'),
+  //   }
+  // ];
 
   const items = [
     {
-      label: 'Home',
+      label: 'Домой',
       icon: 'pi pi-fw pi-home',
       command: () => navigate('/'),
     },
     {
-      label: 'About Us',
+      label: 'О нас',
       icon: 'pi pi-fw pi-info-circle',
       command: () => navigate('/about'),
     },
     {
-      label: 'Delivery',
+      label: 'Доставка',
       icon: 'pi pi-fw pi-truck',
       command: () => navigate('/delivery'),
+    },
+    {
+      label: 'Проект ' +
+        '',
+      icon: 'pi pi-fw pi-server',
+      command: () => navigate('/project'),
     }
   ];
 
+  const addProduct = () => {
+    products.setProduct({})
+    appState.setAddDialogVisible(true)
+  }
+
   const start = <img alt="logo" src={logo} height="40" className="mx-4"></img>;
   const end =
-    <div className="flex">
-      <InputText placeholder="Search" type="text" className="w-full" />
-      { auth.isAdmin &&
-        <Button icon="pi pi-pencil" text raised severity="danger" onClick={() => state.setAddDialogVisible(true)} /> }
-      { auth.isAuthenticated ?
-        <Button label="Quit" icon="pi pi-power-off" text raised onClick={ () => auth.logout() } className="pr-5" />
-        : <Button label="Login" icon="pi pi-sign-in" text raised onClick={ () => navigate('/cart') } className="pr-5" /> }
+    <div>
+      <div className="flex">
+        <InputText placeholder="Search" type="text" className="w-full" />
+        { auth.isAdmin &&
+          <Button icon="pi pi-pencil" text raised severity="danger" onClick={ addProduct } /> }
+        { auth.isAuthenticated ?
+          <Button label="Выход" icon="pi pi-power-off" text raised onClick={ () => auth.logout() } className="pr-5" />
+          : <Button label="Войти" icon="pi pi-sign-in" text raised onClick={ () => navigate('/cart') } className="pr-5" /> }
+      </div>
     </div>
 
   return (
@@ -72,4 +129,4 @@ export const Navbar = () => {
       </div>
     </header>
   )
-}
+})

@@ -1,7 +1,7 @@
-const { Router } = require('express')
+const {Router} = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { check, validationResult } = require('express-validator')
+const {check, validationResult} = require('express-validator')
 const User = require('../models/User')
 const config = require('config')
 const router = Router()
@@ -22,23 +22,23 @@ router.post(
           message: 'Incorrect data during registration'
         })
       }
-      const { email, password } = req.body
+      const {email, password} = req.body
 
-      const candidate = await User.findOne({ email })
+      const candidate = await User.findOne({email})
 
       if (candidate) {
-        return res.status(400).json({ message: 'This user already exists.' })
+        return res.status(400).json({message: 'This user already exists.'})
       }
 
       const hashedPassword = await bcrypt.hash(password, 12)
-      const user = new User({ email, password: hashedPassword })
+      const user = new User({email, password: hashedPassword})
 
       await user.save()
 
-      res.status(201).json({ message: 'User has been created!' })
+      res.status(201).json({message: 'User has been created!'})
 
     } catch (e) {
-      res.status(500).json({ message: "Register Error " })
+      res.status(500).json({message: "Register Error "})
     }
   }
 )
@@ -60,30 +60,73 @@ router.post(
         })
       }
 
-      const { email, password } = req.body
+      const {email, password} = req.body
 
-      const user = await User.findOne({ email })
+      const user = await User.findOne({email})
 
       if (!user) {
-        return res.status(400).json({ message: 'User not found' })
+        return res.status(400).json({message: 'User not found'})
       }
 
       const isMatch = await bcrypt.compare(password, user.password)
 
       if (!isMatch) {
-        return res.status(400).json({ message: 'Incorrect password' })
+        return res.status(400).json({message: 'Incorrect password'})
       }
 
       const token = jwt.sign(
-        { userId: user.id },
+        {userId: user.id},
         config.get('jwtSecret'),
-        { expiresIn: '5h' }
+        {expiresIn: '5h'}
       )
 
-      res.json({ token, userId: user.id, isAdmin: user.get('isAdmin') })
+      res.json({token, userId: user.id, isAdmin: user.get('isAdmin'), cart: user.cart})
 
     } catch (e) {
-      res.status(500).json({ message: "Login Error " })
+      res.status(500).json({message: "Login Error "})
+    }
+  }
+)
+
+router.patch(
+  '/addToCart',
+  async (req, res) => {
+    try {
+      const {_id, product, quantity} = req.body
+      const user = await User.findOne({_id})
+      const candidate = user.cart.findIndex(p => p.product === product)
+      if (candidate >= 0) {
+        if (quantity) user.cart[candidate].quantity = quantity
+        else user.cart[candidate].quantity++
+      } else
+        user.cart.push({product, quantity: 1})
+      await user.save()
+      res.status(200).json({user})
+
+      if (!user) {
+        return res.status(400).json({message: 'User not found'})
+      }
+    } catch (e) {
+      res.status(500).json({message: "ADD Error "})
+    }
+  }
+)
+
+router.patch(
+  '/removeFromCart',
+  async (req, res) => {
+    try {
+      const {_id, product} = req.body
+      const user = await User.findOne({_id})
+      user.cart = product ? user.cart.filter(p => p.product !== product) : []
+      await user.save()
+      res.status(200).json({user})
+
+      if (!user) {
+        return res.status(400).json({message: 'User not found'})
+      }
+    } catch (e) {
+      res.status(500).json({message: "Remove Error "})
     }
   }
 )

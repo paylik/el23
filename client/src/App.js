@@ -12,21 +12,70 @@ import { useAppState } from "./hooks/state.hook";
 import { AddProductDialog } from "./components/AddProduct";
 
 function App() {
-  const { token, login, logout, userId, isAdmin } = useAuth()
-  const { isLoading, setIsLoading, addDialogVisible, setAddDialogVisible, productId, setProductId, category, setCategory,
-    description, setDescription, manufacturer, setManufacturer, country, setCountry, price, setPrice, img, setImg } = useAppState()
+  const {token, login, logout, userId, isAdmin, cart, addToCart, removeFromCart} = useAuth()
+  const {
+    isLoading,
+    setIsLoading,
+    addDialogVisible,
+    setAddDialogVisible,
+    _id,
+    set_Id,
+    title,
+    setTitle,
+    productId,
+    setProductId,
+    category,
+    setCategory,
+    description,
+    setDescription,
+    manufacturer,
+    setManufacturer,
+    country,
+    setCountry,
+    price,
+    setPrice,
+    img,
+    setImg,
+    categories,
+    clearState
+  } = useAppState()
   const isAuthenticated = !!token
   const routes = useRoutes(isAuthenticated)
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, userId, isAdmin, isAuthenticated }}>
-      <StateContext.Provider value={{ isLoading, setIsLoading, addDialogVisible, setAddDialogVisible, productId, setProductId,
-        category, setCategory, description, setDescription, manufacturer, setManufacturer, country, setCountry, price, setPrice, img, setImg }}>
+    <AuthContext.Provider
+      value={{token, login, logout, userId, isAdmin, isAuthenticated, cart, addToCart, removeFromCart}}>
+      <StateContext.Provider value={{
+        isLoading,
+        setIsLoading,
+        addDialogVisible,
+        setAddDialogVisible,
+        _id,
+        set_Id,
+        title,
+        setTitle,
+        productId,
+        setProductId,
+        category,
+        setCategory,
+        description,
+        setDescription,
+        manufacturer,
+        setManufacturer,
+        country,
+        setCountry,
+        price,
+        setPrice,
+        img,
+        setImg,
+        categories,
+        clearState
+      }}>
         <BrowserRouter>
-          <div className="m-4">
-            <Navbar />
-            <AddProductDialog />
-            { routes }
+          <div>
+            <Navbar/>
+            <AddProductDialog/>
+            {routes}
           </div>
         </BrowserRouter>
       </StateContext.Provider>

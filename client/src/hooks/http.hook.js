@@ -9,9 +9,12 @@ export const useHttp = () => {
       if (body) {
         body = JSON.stringify(body)
         headers['Content-Type'] = 'application/json'
+        // headers['Limit'] = '16K'
       }
       const response = await fetch(url, { method, body, headers })
+      console.log("ASASASAS", response)
       const data = await response.json()
+      console.log("22222222", data)
 
       if (!response.ok) {
         throw new Error(data.message || 'Response Error')

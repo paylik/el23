@@ -6,8 +6,10 @@ import { useHttp } from "../hooks/http.hook";
 import { Toast } from "primereact/toast";
 import { useMessage } from "../hooks/message.hook";
 import { AuthContext } from "../context/AuthContext";
+import { observer } from "mobx-react-lite";
+import products from "../store/products";
 
-export const AuthPage = () => {
+export const AuthPage = observer(() => {
   const auth = useContext(AuthContext)
   const toast = useRef(null)
   const message = useMessage(toast)
@@ -29,7 +31,7 @@ export const AuthPage = () => {
   const registerHandler = async () => {
     try {
       const data = await request('/api/auth/register', 'POST', {...form})
-      auth.login(data.token, data.userId, data.isAdmin)
+      auth.login(data.token, data.userId, data.isAdmin, data.cart)
       message(data.message)
     } catch (e)  {}
   }
@@ -37,7 +39,10 @@ export const AuthPage = () => {
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', {...form})
-      auth.login(data.token, data.userId, data.isAdmin)
+      // products.setCart(data.cart)
+      products.previousOrders = data.orders
+      console.log("LOGIN", data)
+      auth.login(data.token, data.userId, data.isAdmin, data.cart)
     } catch (e)  {}
   }
 
@@ -72,4 +77,4 @@ export const AuthPage = () => {
       </div>
     </div>
     )
-}
+})

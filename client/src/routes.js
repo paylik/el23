@@ -6,7 +6,9 @@ import { ProductPage } from "./pages/ProductPage";
 import { AboutPage } from "./pages/AboutPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { DeliveryPage } from "./pages/DeliveryPage";
+import { ProjectPage } from "./pages/ProjectPage";
 import { CartPage } from "./pages/CartPage";
+import { CategoryPage } from "./pages/CategoryPage";
 
 export const useRoutes = isAuthenticated => {
   if (isAuthenticated) {
@@ -16,7 +18,8 @@ export const useRoutes = isAuthenticated => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/delivery" element={<DeliveryPage />} />
-        <Route path="/product" element={<ProductPage />} />
+        <Route path="/project" element={<ProjectPage />} />
+        <Route path="/product/category/:category" element={<CategoryPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
@@ -28,7 +31,8 @@ export const useRoutes = isAuthenticated => {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/product/:id" element={<ProductPage />} />
       <Route path="/delivery" element={<DeliveryPage />} />
-      <Route path="/product" element={<ProductPage />} />
+      <Route path="/project" element={<ProjectPage />} />
+      <Route path="/product/category/:category" element={<CategoryPage />} />
       <Route path="*" element={<AuthPage />} />
     </Routes>
   )
