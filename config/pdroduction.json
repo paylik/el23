@@ -1,0 +1,5 @@
+{
+  "port": 5000,
+  "jwtSecret": "paylik el23",
+  "mongoUri": "mongodb+srv://paylik:QbBGz0q6wW0gtiKX@cluster0.pipke4h.mongodb.net/app"
+}
