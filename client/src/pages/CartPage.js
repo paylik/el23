@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { AuthContext } from "../context/AuthContext"
 import { useHttp } from "../hooks/http.hook"
@@ -11,6 +11,8 @@ import { Toast } from "primereact/toast"
 import { InputText } from "primereact/inputtext"
 import emailjs from '@emailjs/browser'
 import { Link } from "react-router-dom";
+import products from "../store/products";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 
 export const CartPage = observer(() => {
@@ -20,7 +22,7 @@ export const CartPage = observer(() => {
   const [total, setTotal] = useState(0)
   const [deleteProductDialog, setDeleteProductDialog] = useState(false)
   const [product, setProduct] = useState(null)
-  const {request} = useHttp()
+  const {request, loading} = useHttp()
   const toast = useRef(null)
 
   const [name, setName] = useState("")
@@ -28,7 +30,7 @@ export const CartPage = observer(() => {
   const [address, setAddress] = useState("")
   const [note, setNote] = useState("")
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const cart = []
     await Promise.all(auth.cart.map(async (product) => {
       const data = await request(`/api/product/${product.product}`, 'GET', null)
@@ -46,19 +48,19 @@ export const CartPage = observer(() => {
       }
     })
     setCartProducts(tableCart)
-  }
+  }, [auth.cart, request])
 
-  const calculateSum = () => cartProducts.reduce((sum, currentValue) => {
+  const calculateSum = useCallback(() => cartProducts.reduce((sum, currentValue) => {
     sum += (currentValue.price * currentValue.quantity)
     return sum
-  }, 0)
+  }, 0), [cartProducts])
 
   useEffect(() => {
     fetchData()
-  }, [auth.cart])
+  }, [auth.cart, fetchData])
   useEffect(() => {
     setTotal(calculateSum().toFixed(2))
-  }, [cartProducts])
+  }, [cartProducts, calculateSum])
 
   const deleteProduct = () => {
     let _products = cartProducts.filter((val) => val.id !== product.id)
@@ -172,6 +174,10 @@ export const CartPage = observer(() => {
     return (product.quantity * product.price).toFixed(2)
   }
 
+  const categoryTemplate = (product) => {
+    return products.getCategoryName(product.category)
+  }
+
   const actionBodyTemplate = (rowData) => {
     return (
       <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteProduct(rowData)}/>
@@ -184,52 +190,58 @@ export const CartPage = observer(() => {
   }
 
   const deleteProductDialogFooter = (
-    <React.Fragment>
+    <>
       <Button label="Отмена" icon="pi pi-times" outlined onClick={() => setDeleteProductDialog(false)}/>
       <Button label="Удалить" icon="pi pi-check" severity="danger" onClick={deleteProduct}/>
-    </React.Fragment>
+    </>
   );
+
+  const cart = (
+    <div className="card p-fluid">
+      <DataTable value={cartProducts} sortField="title" sortOrder={1} size={"small"}
+                 stripedRows editMode="cell" header={header} footer={footer} tableStyle={{minWidth: '60rem'}}>
+        <Column header="Фото" body={imageBodyTemplate}></Column>
+        <Column field="title" header="Название" sortable></Column>
+        <Column field="category" header="Категория" body={categoryTemplate}></Column>
+        <Column field="quantity" header="Количество" editor={(options) => quantityEditor(options)}
+                onCellEditComplete={onCellEditComplete}></Column>
+        {/*<Column field="price" header="Цена" body={priceBodyTemplate}></Column>*/}
+        <Column field="price" header="Цена"></Column>
+        <Column field="sum" header="Стоимость" body={sumTemplate}></Column>
+        <Column body={actionBodyTemplate} exportable={false} style={{minWidth: '2rem'}}></Column>
+      </DataTable>
+      <div className="card justify-content-center">
+        <div className="p-float-label mt-5">
+          <InputText id="name" value={name} onChange={(e) => setName(e.target.value)}
+                     className={!name ? "p-invalid" : ""}/>
+          <label htmlFor="name">ФИО</label>
+        </div>
+        <div className="p-float-label mt-5">
+          <InputText id="phone" value={phone} onChange={(e) => setPhone(e.target.value)}
+                     className={!phone ? "p-invalid" : ""}/>
+          <label htmlFor="phone">Телефон</label>
+        </div>
+        <div className="p-float-label mt-5">
+          <InputText id="address" value={address} onChange={(e) => setAddress(e.target.value)}
+                     className={!address ? "p-invalid" : ""}/>
+          <label htmlFor="address">Адрес</label>
+        </div>
+        <div className="p-float-label mt-5">
+          <InputText id="note" value={note} onChange={(e) => setNote(e.target.value)}
+                     className={!note ? "p-invalid" : ""}/>
+          <label htmlFor="note">Примечание</label>
+        </div>
+      </div>
+      <Button label="Оформить заказ" icon="pi pi-check" className="mt-5" disabled={!phone} onClick={sendEmail}/>
+    </div>
+  )
 
   return (
     <div className="mx-6">
       <h1>Корзина</h1>
-      <div className="card p-fluid">
-        <DataTable value={cartProducts} sortField="title" sortOrder={1} size={"small"}
-                   stripedRows editMode="cell" header={header} footer={footer} tableStyle={{minWidth: '60rem'}}>
-          <Column header="Фото" body={imageBodyTemplate}></Column>
-          <Column field="title" header="Название" sortable></Column>
-          <Column field="category" header="Категория"></Column>
-          <Column field="quantity" header="Количество" editor={(options) => quantityEditor(options)}
-                  onCellEditComplete={onCellEditComplete}></Column>
-          {/*<Column field="price" header="Цена" body={priceBodyTemplate}></Column>*/}
-          <Column field="price" header="Цена"></Column>
-          <Column field="sum" header="Стоимость" body={sumTemplate}></Column>
-          <Column body={actionBodyTemplate} exportable={false} style={{minWidth: '2rem'}}></Column>
-        </DataTable>
-        <div className="card justify-content-center">
-          <div className="p-float-label mt-5">
-            <InputText id="name" value={name} onChange={(e) => setName(e.target.value)}
-                       className={!name ? "p-invalid" : ""}/>
-            <label htmlFor="name">ФИО</label>
-          </div>
-          <div className="p-float-label mt-5">
-            <InputText id="phone" value={phone} onChange={(e) => setPhone(e.target.value)}
-                       className={!phone ? "p-invalid" : ""}/>
-            <label htmlFor="phone">Телефон</label>
-          </div>
-          <div className="p-float-label mt-5">
-            <InputText id="address" value={address} onChange={(e) => setAddress(e.target.value)}
-                       className={!address ? "p-invalid" : ""}/>
-            <label htmlFor="address">Адрес</label>
-          </div>
-          <div className="p-float-label mt-5">
-            <InputText id="note" value={note} onChange={(e) => setNote(e.target.value)}
-                       className={!note ? "p-invalid" : ""}/>
-            <label htmlFor="note">Примечание</label>
-          </div>
-        </div>
-        <Button label="Оформить заказ" icon="pi pi-check" className="mt-5" disabled={!phone} onClick={sendEmail}/>
-      </div>
+      {loading ? <div className="card flex justify-content-center">
+        <ProgressSpinner/>
+      </div> : cart}
       <Toast ref={toast}/>
       <Dialog visible={deleteProductDialog} style={{width: '32rem'}} breakpoints={{'960px': '75vw', '641px': '90vw'}}
               header="Внимание" modal footer={deleteProductDialogFooter} onHide={() => setDeleteProductDialog(false)}>

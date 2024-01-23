@@ -1,22 +1,23 @@
 import { makeAutoObservable } from "mobx";
 
 
-class Products{
+class Products {
 
   categoryProducts = []
+  categoryName = ''
   categoriesList = []
   product = {}
   cart = []
   previousOrders = []
   categories = [
-    { code: 'cable', name: 'Кабельная продукция' },
-    { code: 'pipe', name: 'Гофра и труба' },
-    { code: 'box', name: 'Электромонтажные коробки' },
-    { code: 'frame', name: 'Корпуса, щитки' },
-    { code: 'automation', name: 'Автоматика' },
-    { code: 'socket', name: 'Розетки, выключатели' },
-    { code: 'lighting', name: 'Светотехника' },
-    { code: 'insulation', name: 'Изоляция' }
+    {code: 'cable', name: 'Кабельная продукция'},
+    {code: 'pipe', name: 'Гофра и труба'},
+    {code: 'box', name: 'Электромонтажные коробки'},
+    {code: 'frame', name: 'Корпуса, щитки'},
+    {code: 'automation', name: 'Автоматика'},
+    {code: 'socket', name: 'Розетки, выключатели'},
+    {code: 'lighting', name: 'Светотехника'},
+    {code: 'insulation', name: 'Изоляция'}
   ]
 
   constructor() {
@@ -32,7 +33,11 @@ class Products{
   }
 
   setProduct(product) {
-   this.product = product
+    this.product = product
+  }
+
+  setCategoryName(name) {
+    this.categoryName = name
   }
 
   setProductValue(key, value) {
@@ -46,7 +51,6 @@ class Products{
 
   setCart(products) {
     this.cart = [...products]
-    console.log("CART", this.cart)
   }
 
 }

@@ -4,7 +4,6 @@ import { useHttp } from "../hooks/http.hook"
 import { AuthContext } from "../context/AuthContext"
 import { Card } from "primereact/card"
 import { Button } from "primereact/button"
-import { StateContext } from "../context/StateContext"
 import { ConfirmPopup } from "primereact/confirmpopup"
 import no_image from "../img/no_image.png"
 import products from "../store/products";
@@ -22,19 +21,21 @@ export const ProductPage = observer(() => {
   // const [category, setCategory] = useState("")
   const buttonEl = useRef(null)
   const navigate = useNavigate()
-  const {categories} = useContext(StateContext)
+  // const {categories} = useContext(StateContext)
 
   const getProduct = useCallback(async () => {
     try {
       const fetched = await request(`/api/product/${pageId}`, 'GET', null)
       products.setProduct(fetched)
     } catch (e) {
+      navigate('/error')
       console.log("ERROR", e)
     }
-  }, [pageId])
+  }, [pageId, request])
 
   useEffect(() => {
     getProduct()
+    //return products.setProduct({})
   }, [getProduct])
 
   const changeProduct = () => {

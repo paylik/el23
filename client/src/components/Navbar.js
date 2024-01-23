@@ -36,6 +36,12 @@ export const Navbar = observer(() => {
       command: () => navigate('/project'),
     },
     {
+      label: 'Услуги электрика ',
+      icon: 'pi pi-fw pi-wrench',
+      url: 'http://electrician.nbacademy.ru/',
+      target: '_blank'
+    },
+    {
       // label: `( ${ cart.length ?? cart.length } )  Корзина`,
       label: `Корзина`,
       icon: 'pi pi-fw pi-shopping-cart',
@@ -46,7 +52,7 @@ export const Navbar = observer(() => {
 
   useEffect(() => {
     let i = [...loginItems]
-    if (auth.cart && auth.cart.length) i[4].label = `( ${ auth.cart.length } )  Корзина`
+    if (auth.cart && auth.cart.length) i[5].label = `( ${auth.cart.length} )  Корзина`
     setLoginItems([...i])
   }, [auth.cart])
 
@@ -101,6 +107,12 @@ export const Navbar = observer(() => {
         '',
       icon: 'pi pi-fw pi-server',
       command: () => navigate('/project'),
+    },
+    {
+      label: 'Услуги электрика ',
+      icon: 'pi pi-fw pi-wrench',
+      url: 'http://electrician.nbacademy.ru/',
+      target: '_blank'
     }
   ];
 
@@ -113,19 +125,19 @@ export const Navbar = observer(() => {
   const end =
     <div>
       <div className="flex">
-        <InputText placeholder="Search" type="text" className="w-full" />
-        { auth.isAdmin &&
-          <Button icon="pi pi-pencil" text raised severity="danger" onClick={ addProduct } /> }
-        { auth.isAuthenticated ?
-          <Button label="Выход" icon="pi pi-power-off" text raised onClick={ () => auth.logout() } className="pr-5" />
-          : <Button label="Войти" icon="pi pi-sign-in" text raised onClick={ () => navigate('/cart') } className="pr-5" /> }
+        <InputText placeholder="Search" type="text" className="w-full"/>
+        {auth.isAdmin &&
+          <Button icon="pi pi-pencil" text raised severity="danger" onClick={addProduct}/>}
+        {auth.isAuthenticated ?
+          <Button label="Выход" icon="pi pi-power-off" text raised onClick={() => auth.logout()} className="pr-5"/>
+          : <Button label="Войти" icon="pi pi-sign-in" text raised onClick={() => navigate('/cart')} className="pr-5"/>}
       </div>
     </div>
 
   return (
     <header>
       <div className="card">
-        <Menubar model={auth.isAuthenticated ? loginItems : items} start={start} end={end} />
+        <Menubar model={auth.isAuthenticated ? loginItems : items} start={start} end={end}/>
       </div>
     </header>
   )
