@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { useHttp } from "../hooks/http.hook";
 import { Link, useParams } from "react-router-dom";
-import { StateContext } from "../context/StateContext";
 import { DataView } from "primereact/dataview";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
@@ -16,9 +15,9 @@ import { ProgressSpinner } from "primereact/progressspinner";
 export const CategoryPage = observer(() => {
     const {request, loading} = useHttp()
     const pageCategory = useParams().category
-    const state = useContext(StateContext)
+    // const state = useContext(StateContext)
     const auth = useContext(AuthContext)
-    const title = state.categories.find(cat => cat.code === pageCategory)
+    // const title = state.categories.find(cat => cat.code === pageCategory)
     const [sortField, setSortField] = useState('')
     const [sortOrder, setSortOrder] = useState(0)
     const [sortKey, setSortKey] = useState('')
@@ -127,7 +126,7 @@ export const CategoryPage = observer(() => {
     return (
       <div>
 
-        <h1>{title.name}</h1>
+        {/*<h1>{title.name}</h1>*/}
         <div className="w-10 m-auto">
           <Toast ref={toastTopCenter} position="top-center"/>
           {loading ? <div className="card flex justify-content-center">

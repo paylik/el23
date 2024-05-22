@@ -15,6 +15,7 @@ export const ProductPage = observer(() => {
   const {request} = useHttp()
   const pageId = useParams().id
   const auth = useContext(AuthContext)
+  // const toastTopCenter = useRef(null)
   // const state = useContext(StateContext)
   const [visible, setVisible] = useState(false)
   // const [url, setUrl] = useState("")
@@ -23,18 +24,30 @@ export const ProductPage = observer(() => {
   const navigate = useNavigate()
   // const {categories} = useContext(StateContext)
 
+  const download = useCallback(async () => {
+    try {
+      const fetched = await request(`/api/img/${products.product.productId}`, 'GET', null)
+      if (fetched) products.setProductValue("img", fetched.data)
+    } catch (e) {
+      console.log("ERROR", e)
+    }
+  }, [request])
+
   const getProduct = useCallback(async () => {
     try {
       const fetched = await request(`/api/product/${pageId}`, 'GET', null)
       products.setProduct(fetched)
+      await download()
     } catch (e) {
       navigate('/error')
       console.log("ERROR", e)
     }
-  }, [pageId, request])
+  }, [pageId, request, navigate, download])
 
   useEffect(() => {
+    console.log("DOWN")
     getProduct()
+
     //return products.setProduct({})
   }, [getProduct])
 
@@ -46,7 +59,13 @@ export const ProductPage = observer(() => {
     setVisible(false)
     navigate(`/product/category/${products.product.category}`)
     try {
-      await request(`/api/product/delete/${pageId}`, 'DELETE')
+      const data = await request(`/api/product/delete/${pageId}`, 'DELETE')
+      console.log("DATA", data)
+      products.setCategory(products.categoryProducts.filter(p => p._id !== pageId))
+      // toastTopCenter.current.show({
+      //   severity: 'error', summary: data.message,
+      //   detail: data.message, life: 3000
+      // })
     } catch (e) {
       console.log("ERROR", e)
     }
@@ -58,8 +77,10 @@ export const ProductPage = observer(() => {
     </div>
   )
 
+
   return (
     <div>
+      {/*<Toast ref={toastTopCenter} position="top-center"/>*/}
       <Link to={`/product/category/${products.product.category}`}>
         <Button style={{width: '100%'}} label={products.getCategoryName(products.product.category)} icon="pi pi-check"/>
       </Link>

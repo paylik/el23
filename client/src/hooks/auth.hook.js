@@ -31,7 +31,6 @@ export const useAuth = () => {
 
   const updateLocalStorage = (r) => {
     const data = JSON.parse(localStorage.getItem(storageName))
-    console.log("RRRRRRRRRRR", r)
     localStorage.setItem(storageName, JSON.stringify({
       userId: data.userId, token: data.token, isAdmin: data.isAdmin, cart: r.user.cart
     }))

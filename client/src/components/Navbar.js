@@ -56,35 +56,6 @@ export const Navbar = observer(() => {
     setLoginItems([...i])
   }, [auth.cart])
 
-  // const loginItems = [
-  //   {
-  //     label: 'Домой',
-  //     icon: 'pi pi-fw pi-home',
-  //     command: () => navigate('/'),
-  //   },
-  //   {
-  //     label: 'О нас',
-  //     icon: 'pi pi-fw pi-info-circle',
-  //     command: () => navigate('/about'),
-  //   },
-  //   {
-  //     label: 'Доставка',
-  //     icon: 'pi pi-fw pi-truck',
-  //     command: () => navigate('/delivery'),
-  //   },
-  //   {
-  //     label: 'Проект ' +
-  //       '',
-  //     icon: 'pi pi-fw pi-server',
-  //     command: () => navigate('/project'),
-  //   },
-  //   {
-  //     label: `( ${ cart.length ?? cart.length } )  Корзина`,
-  //     // label: `Корзина`,
-  //     icon: 'pi pi-fw pi-shopping-cart',
-  //     command: () => navigate('/cart'),
-  //   }
-  // ];
 
   const items = [
     {

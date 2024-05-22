@@ -12,10 +12,14 @@ export const useHttp = () => {
         // headers['Limit'] = '16K'
       }
       const response = await fetch(url, {method, body, headers})
-      const data = await response.json()
+      console.log("RESSSSSS", response)
+      let data
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Response Error')
+      if (response.ok) {
+        data = await response.json()
+      } else {
+        // data = response.statusText
+        throw new Error(response.statusText)
       }
       setLoading(false)
       return data

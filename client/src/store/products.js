@@ -17,7 +17,8 @@ class Products {
     {code: 'automation', name: 'Автоматика'},
     {code: 'socket', name: 'Розетки, выключатели'},
     {code: 'lighting', name: 'Светотехника'},
-    {code: 'insulation', name: 'Изоляция'}
+    {code: 'insulation', name: 'Изоляция'},
+    {code: 'tools', name: 'Инструменты'}
   ]
 
   constructor() {
@@ -51,8 +52,10 @@ class Products {
 
   setCart(products) {
     this.cart = [...products]
+    // runInAction(() => {
+    //   ...
+    // }) ЕСЛИ НУЖНО НЕСКОЛЬКО ДЕЙСТВИЙ ВЫПОЛНИТЬ ИЛИ АСИНХРОННЫЕ ФУНКЦИИ
   }
-
 }
 
 const p = new Products()
