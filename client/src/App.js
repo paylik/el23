@@ -8,6 +8,7 @@ import { useAuth } from "./hooks/auth.hook";
 import { AuthContext } from "./context/AuthContext";
 import { Navbar } from "./components/Navbar";
 import { AddProductDialog } from "./components/AddProduct";
+import { Footer } from "./components/Footer";
 
 function App() {
   const {token, login, logout, userId, isAdmin, cart, addToCart, removeFromCart} = useAuth()
@@ -18,10 +19,11 @@ function App() {
     <AuthContext.Provider
       value={{token, login, logout, userId, isAdmin, isAuthenticated, cart, addToCart, removeFromCart}}>
       <BrowserRouter>
-        <div>
+        <div className="w-10 m-auto pt-3">
           <Navbar/>
           <AddProductDialog/>
           {routes}
+          <Footer/>
         </div>
       </BrowserRouter>
     </AuthContext.Provider>

@@ -45,11 +45,11 @@ export const HomePage = observer(() => {
   }
 
   return (
-    <div>
+    <div className="px-6">
       <h1 className="text-center">Интернет витрина магазина электрики</h1>
       {loading ? <div className="card flex justify-content-center">
         <ProgressSpinner/>
-      </div> : <ul>
+      </div> : <ul className="m-auto px-6">
         {productList}
       </ul>}
     </div>

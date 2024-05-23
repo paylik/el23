@@ -3,7 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { Menubar } from "primereact/menubar";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom'
-import logo from '../img/001.png'
+import logo from '../img/002.jpg'
 import { Button } from "primereact/button";
 // import { StateContext } from "../context/StateContext";
 import { observer } from "mobx-react-lite";
@@ -92,7 +92,7 @@ export const Navbar = observer(() => {
     appState.setAddDialogVisible(true)
   }
 
-  const start = <img alt="logo" src={logo} height="40" className="mx-4"></img>;
+  const start = <img alt="logo" src={logo} height="60" className="mx-4"></img>;
   const end =
     <div>
       <div className="flex">
