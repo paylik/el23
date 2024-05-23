@@ -126,8 +126,8 @@ export const CategoryPage = observer(() => {
     return (
       <div>
 
-        {/*<h1>{title.name}</h1>*/}
-        <div className="w-10 m-auto">
+        <h1>{products.getCategoryName(products.categoryName)}</h1>
+        <div className="md:w-10 m-auto">
           <Toast ref={toastTopCenter} position="top-center"/>
           {loading ? <div className="card flex justify-content-center">
               <ProgressSpinner/>

@@ -19,10 +19,12 @@ function App() {
     <AuthContext.Provider
       value={{token, login, logout, userId, isAdmin, isAuthenticated, cart, addToCart, removeFromCart}}>
       <BrowserRouter>
-        <div className="w-10 m-auto pt-3">
+        <div className="md:w-10 w-11 m-auto pt-3">
           <Navbar/>
           <AddProductDialog/>
-          {routes}
+          <div className="min-h-screen">
+            {routes}
+          </div>
           <Footer/>
         </div>
       </BrowserRouter>

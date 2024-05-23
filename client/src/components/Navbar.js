@@ -31,12 +31,12 @@ export const Navbar = observer(() => {
       command: () => navigate('/delivery'),
     },
     {
-      label: 'Проект ',
+      label: 'Проект',
       icon: 'pi pi-fw pi-server',
       command: () => navigate('/project'),
     },
     {
-      label: 'Услуги электрика ',
+      label: 'Услуги электрика',
       icon: 'pi pi-fw pi-wrench',
       url: 'http://electrician.nbacademy.ru/',
       target: '_blank'
@@ -74,13 +74,12 @@ export const Navbar = observer(() => {
       command: () => navigate('/delivery'),
     },
     {
-      label: 'Проект ' +
-        '',
+      label: 'Проект',
       icon: 'pi pi-fw pi-server',
       command: () => navigate('/project'),
     },
     {
-      label: 'Услуги электрика ',
+      label: 'Услуги электрика',
       icon: 'pi pi-fw pi-wrench',
       url: 'http://electrician.nbacademy.ru/',
       target: '_blank'
@@ -92,16 +91,17 @@ export const Navbar = observer(() => {
     appState.setAddDialogVisible(true)
   }
 
-  const start = <img alt="logo" src={logo} height="60" className="mx-4"></img>;
+  const start = <img alt="logo" src={logo} height="60" className="md:mx-4"></img>;
   const end =
     <div>
       <div className="flex">
-        <InputText placeholder="Search" type="text" className="w-full"/>
+        <InputText placeholder="Поиск" type="text" className="w-full"/>
         {auth.isAdmin &&
           <Button icon="pi pi-pencil" text raised severity="danger" onClick={addProduct}/>}
         {auth.isAuthenticated ?
-          <Button label="Выход" icon="pi pi-power-off" text raised onClick={() => auth.logout()} className="pr-5"/>
-          : <Button label="Войти" icon="pi pi-sign-in" text raised onClick={() => navigate('/cart')} className="pr-5"/>}
+          <Button label="Выход" icon="pi pi-power-off" text raised onClick={() => auth.logout()} className="pr-6 pl-1"/>
+          : <Button label="Войти" icon="pi pi-sign-in" text raised onClick={() => navigate('/cart')}
+                    className="pr-6 pl-1"/>}
       </div>
     </div>
 

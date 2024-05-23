@@ -31,10 +31,11 @@ export const CartPage = observer(() => {
   const [note, setNote] = useState("")
 
   const fetchData = useCallback(async () => {
+    console.log("CART", auth.cart)
     const cart = []
     await Promise.all(auth.cart.map(async (product) => {
       const data = await request(`/api/product/${product.product}`, 'GET', null)
-      cart.push({product: data, quantity: product.quantity})
+      if (data) cart.push({product: data, quantity: product.quantity})
     }))
     const tableCart = cart.map(product => {
       return {
@@ -85,6 +86,11 @@ export const CartPage = observer(() => {
   const imageBodyTemplate = (product) => {
     return <Link to={`/product/${product.id}`}><img src={product.image} alt={product.name}
                                                     className="w-4rem shadow-2 border-round"/>
+    </ Link>
+  }
+
+  const titleBodyTemplate = (product) => {
+    return <Link to={`/product/${product.id}`}><p>{product.title}</p>
     </ Link>
   }
 
@@ -201,7 +207,7 @@ export const CartPage = observer(() => {
       <DataTable value={cartProducts} sortField="title" sortOrder={1} size={"small"}
                  stripedRows editMode="cell" header={header} footer={footer} tableStyle={{minWidth: '60rem'}}>
         <Column header="Фото" body={imageBodyTemplate}></Column>
-        <Column field="title" header="Название" sortable></Column>
+        <Column field="title" body={titleBodyTemplate} header="Название" sortable></Column>
         <Column field="category" header="Категория" body={categoryTemplate}></Column>
         <Column field="quantity" header="Количество" editor={(options) => quantityEditor(options)}
                 onCellEditComplete={onCellEditComplete}></Column>
@@ -237,7 +243,7 @@ export const CartPage = observer(() => {
   )
 
   return (
-    <div className="mx-6">
+    <div className="md:mx-6">
       <h1>Корзина</h1>
       {loading ? <div className="card flex justify-content-center">
         <ProgressSpinner/>

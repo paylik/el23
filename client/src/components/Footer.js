@@ -5,7 +5,7 @@ export const Footer = () => {
   return (
     <footer>
       {/*<Panel>*/}
-      <div className="bg-purple-50 my-2 flex justify-content-center">
+      <div className="bg-purple-50 my-2 flex justify-content-center flex-wrap">
         <Button icon="pi pi-instagram" size="large" rounded text severity="info"
                 aria-label="Instagram" onClick={() => window.open('https://www.instagram.com/', '_blank')}/>
         <Button icon="pi pi-telegram" size="large" rounded text severity="info" aria-label="Telegram"
